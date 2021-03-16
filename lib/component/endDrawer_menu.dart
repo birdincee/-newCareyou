@@ -45,9 +45,15 @@ class _EndDrawerMenuState extends State<EndDrawerMenu> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text('data'),
-            accountEmail: Text('data'),
+          DrawerHeader(
+            child: Center(
+              child: CircleAvatar(
+                child: FlutterLogo(),
+              ),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.purple,
+            ),
           ),
           Padding(
             padding: ePadMenu,

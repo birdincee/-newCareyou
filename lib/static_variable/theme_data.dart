@@ -12,7 +12,6 @@ class StaticTheme{
 
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-
     visualDensity: VisualDensity.adaptivePlatformDensity,
     primarySwatch: Colors.purple,
     appBarTheme: AppBarTheme(
@@ -20,8 +19,14 @@ class StaticTheme{
     ),
     switchTheme: SwitchThemeData(
       thumbColor: MaterialStateProperty.resolveWith(
-            (states) => Colors.amber,
+        (states) => Colors.amber,
       ),
+    ),
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.purple,
     ),
   );
 }
