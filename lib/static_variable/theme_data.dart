@@ -29,4 +29,16 @@ class StaticTheme{
       backgroundColor: Colors.purple,
     ),
   );
+
+  static InputDecoration decorationDarkTheme = InputDecoration(
+    border: OutlineInputBorder(),
+    fillColor: Colors.white,
+    // filled: true,
+  );
+
+  static InputDecoration decorationLightTheme = InputDecoration(
+    border: OutlineInputBorder(),
+    fillColor: Colors.blue.shade300,
+    filled: true,
+  );
 }

@@ -17,7 +17,7 @@ class _IndexScreenState extends State<IndexScreen> {
   CurvedAnimation curve;
 
   final iconList = <IconData>[
-    Icons.brightness_5,
+    Icons.home,
     Icons.brightness_4,
     Icons.brightness_6,
     Icons.brightness_7,
@@ -47,54 +47,56 @@ class _IndexScreenState extends State<IndexScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => WillCall().willPopCallback(),
-      child: AnimatedTheme(
-        duration: Duration(milliseconds: 500),
-        data: Theme.of(context),
-        child: Scaffold(
-          appBar: AppBar(),
-          endDrawer: EndDrawerMenu(),
-          body: FutureBuilder(
-            future: loadList(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return listPage[_bottomNavIndex];
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            elevation: 8,
-            child: Icon(
-              Icons.brightness_3,
+      child: SafeArea(
+        child: AnimatedTheme(
+          duration: Duration(milliseconds: 500),
+          data: Theme.of(context),
+          child: Scaffold(
+            appBar: AppBar(),
+            endDrawer: EndDrawerMenu(),
+            body: FutureBuilder(
+              future: loadList(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return listPage[_bottomNavIndex];
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
-            onPressed: () {
-              _animationController.reset();
-              _animationController.forward();
-            },
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-            itemCount: iconList.length,
-            tabBuilder: (int index, bool isActive) {
-              final color = isActive ? Colors.purple : Colors.black;
-              return Icon(
-                iconList[index],
-                size: 24,
-                color: color,
-              );
-            },
-            activeIndex: _bottomNavIndex,
-            notchAndCornersAnimation: animation,
-            splashSpeedInMilliseconds: 500,
-            notchSmoothness: NotchSmoothness.defaultEdge,
-            gapLocation: GapLocation.center,
-            leftCornerRadius: 32,
-            rightCornerRadius: 32,
-            onTap: (index) => navigatorPage(index),
+            floatingActionButton: FloatingActionButton(
+              elevation: 8,
+              child: Icon(
+                Icons.brightness_3,
+              ),
+              onPressed: () {
+                _animationController.reset();
+                _animationController.forward();
+              },
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+              itemCount: iconList.length,
+              tabBuilder: (int index, bool isActive) {
+                final color = isActive ? Colors.purple : Colors.black;
+                return Icon(
+                  iconList[index],
+                  size: 24,
+                  color: color,
+                );
+              },
+              activeIndex: _bottomNavIndex,
+              notchAndCornersAnimation: animation,
+              splashSpeedInMilliseconds: 500,
+              notchSmoothness: NotchSmoothness.defaultEdge,
+              gapLocation: GapLocation.center,
+              // leftCornerRadius: 32,
+              // rightCornerRadius: 32,
+              onTap: (index) => navigatorPage(index),
+            ),
           ),
         ),
       ),

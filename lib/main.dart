@@ -1,19 +1,49 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:location/location.dart';
+import 'package:newcareyou/component/txtfield.dart';
+import 'package:newcareyou/component/willpopCallBack.dart';
 import 'package:newcareyou/function/funtion_default.dart';
 import 'package:newcareyou/screen/index_screen.dart';
 import 'package:newcareyou/static_variable/static_bool.dart';
+import 'package:newcareyou/static_variable/static_object.dart';
 import 'package:newcareyou/static_variable/static_page_name.dart';
 import 'package:newcareyou/static_variable/theme_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  // ดึงค่า Theme
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  final pageRoute = await StaticPageName().routesName();
-  StaticBool.bCheckLogin = await FnDefault().checkLogin();
-  print(StaticBool.bCheckLogin);
+  //
+  final pageRoute =
+      await StaticPageName().routesName(); // ดึงค่า ชื่อ RoutePage
+  StaticBool.bCheckLogin =
+      await FnDefault().checkLogin(); // ดึงค่าเช็คว่าเคย Login แล้วหรือยัง
+  StaticBool.bCheckTheme = await FnDefault().checkBoolTheme();
+  print("bCheckTheme :" + StaticBool.bCheckTheme.toString());
+  //location
+  bool _serviceEnabled =
+      await FnDefault().requestServiceLocation(); // เช็ค ServiceLocation
+  print("serviceEnabled " + " $_serviceEnabled");
+  PermissionStatus _permissionGranted =
+      await FnDefault().requestLocationPermission(); // เช็ค PermissionLocation
+  print("PermissionStatus " + " $_permissionGranted");
+  StaticLocation.currentLocation =
+      await FnDefault().getCurrentLocation(); // ดึงค่า Location ปัจจุบัน
+  if (StaticLocation.currentLocation != null) {
+    StaticLocation.myLatitude =
+        StaticLocation.currentLocation.latitude; // set ค่า lat
+    StaticLocation.myLongitude =
+        StaticLocation.currentLocation.longitude; // set ค่า long
+    print("Lat :" +
+        StaticLocation.myLatitude.toString() +
+        " Long :" +
+        StaticLocation.myLongitude.toString());
+  }
+  //
+  print("bCheckLogin " + StaticBool.bCheckLogin.toString());
   runApp(
     MyApp(
       savedThemeMode: savedThemeMode,
@@ -42,7 +72,8 @@ class MyApp extends StatelessWidget {
         darkTheme: darkTheme,
         debugShowCheckedModeBanner: false,
         initialRoute:
-            !bCheckLogin ? StaticPageName.firstPage : StaticPageName.indexPage,
+            // !bCheckLogin ? StaticPageName.firstPage : StaticPageName.indexPage,
+            StaticPageName.firstPage,
         routes: pageRoute,
         home: MyHomePage(),
       ),
@@ -56,8 +87,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<bool> _willPopCallback() async {
-    return false; // return true if the route to be popped
+  singIn() async {
+    StaticBool.bCheckLogin = await FnDefault().setCheckLogin();
+    if (StaticBool.bCheckLogin) {
+      await Navigator.pushReplacementNamed(context, StaticPageName.indexPage);
+      print(StaticBool.bCheckLogin);
+    }
   }
 
   @override
@@ -66,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       duration: Duration(milliseconds: 300),
       data: Theme.of(context),
       child: WillPopScope(
-        onWillPop: _willPopCallback,
+        onWillPop: () => WillCall().willPopCallback(),
         child: SafeArea(
           child: Scaffold(
             body: SizedBox.expand(
@@ -76,46 +111,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Spacer(),
                   Text(
-                    'Current Theme Mode',
+                    'CareYou',
                     style: TextStyle(
                       fontSize: 20,
                       letterSpacing: 0.8,
                     ),
                   ),
-                  Text(
-                    AdaptiveTheme.of(context).mode.name.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 24,
-                      height: 2.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  TextBox(
+                    checkTheme: StaticBool.bCheckTheme,
+                  ),
+                  ElevatedButton(
+                    onPressed: singIn,
+                    child: Text('Singin'),
                   ),
                   Spacer(),
-                  ElevatedButton(
-                    onPressed: () {
-                      AdaptiveTheme.of(context).toggleThemeMode();
-                    },
-                    child: Text('Toggle Theme Mode'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      AdaptiveTheme.of(context).setDark();
-                    },
-                    child: Text('Set Dark'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      AdaptiveTheme.of(context).setLight();
-                    },
-                    child: Text('set Light'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      AdaptiveTheme.of(context).setSystem();
-                    },
-                    child: Text('Set System Default'),
-                  ),
-                  Spacer(flex: 2),
                 ],
               ),
             ),
