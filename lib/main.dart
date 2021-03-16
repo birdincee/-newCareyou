@@ -2,48 +2,39 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:newcareyou/screen/home_screen.dart';
+import 'package:newcareyou/static_variable/static_page_name.dart';
+import 'package:newcareyou/static_variable/theme_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  final pageRoute = await StaticPageName().routesName();
+  runApp(
+      MyApp(
+        savedThemeMode: savedThemeMode,
+        pageRoute: pageRoute,
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   final AdaptiveThemeMode savedThemeMode;
-
-  const MyApp({Key key, this.savedThemeMode}) : super(key: key);
+  final dynamic pageRoute;
+  const MyApp({Key key, this.savedThemeMode, this.pageRoute}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
-      light: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.red,
-        accentColor: Colors.amber,
-        switchTheme: SwitchThemeData(),
-      ),
-      dark: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.red,
-        accentColor: Colors.amber,
-        switchTheme: SwitchThemeData(
-          thumbColor: MaterialStateProperty.resolveWith(
-            (states) => Colors.amber,
-          ),
-        ),
-      ),
+      light: StaticTheme.lightTheme,
+      dark: StaticTheme.darkTheme,
       initial: savedThemeMode ?? AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp(
         title: 'Adaptive Theme Demo',
         theme: theme,
         darkTheme: darkTheme,
         debugShowCheckedModeBanner: false,
-        initialRoute: 'First',
-        routes: <String, WidgetBuilder>{
-          'First': (context) => MyHomePage(),
-          'HomeScreen': (context) => HomeScreen(),
-        },
+        initialRoute: StaticPageName.firstPage,
+        routes: pageRoute,
         home: MyHomePage(),
       ),
     );
