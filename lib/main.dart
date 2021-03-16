@@ -28,8 +28,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         accentColor: Colors.amber,
         switchTheme: SwitchThemeData(
-          // trackColor: MaterialStateProperty.resolveWith((states) => Colors.amber,),
-          // overlayColor: MaterialStateProperty.resolveWith((states) => Colors.amber,),
           thumbColor: MaterialStateProperty.resolveWith(
             (states) => Colors.amber,
           ),
@@ -40,6 +38,12 @@ class MyApp extends StatelessWidget {
         title: 'Adaptive Theme Demo',
         theme: theme,
         darkTheme: darkTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'First',
+        routes: <String, WidgetBuilder>{
+          'First': (context) => MyHomePage(),
+          'HomeScreen': (context) => HomeScreen(),
+        },
         home: MyHomePage(),
       ),
     );
@@ -113,11 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ));
+            Navigator.pushNamed(context, 'HomeScreen');
           },
           child: Icon(Icons.add),
         ),
