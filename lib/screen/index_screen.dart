@@ -54,6 +54,7 @@ class _IndexScreenState extends State<IndexScreen> {
           child: Scaffold(
             appBar: AppBar(),
             endDrawer: EndDrawerMenu(),
+            extendBody: true,
             body: FutureBuilder(
               future: loadList(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
