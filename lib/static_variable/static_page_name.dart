@@ -8,12 +8,14 @@ class StaticPageName {
     Map<String, WidgetBuilder> mapRoutes = {
       firstPage: (context) => MyHomePage(),
       indexPage: (context) => IndexScreen(),
+      homePage: (context) => Page1(),
     };
     return mapRoutes;
   }
 
   static String firstPage = 'First';
   static String indexPage = 'HomeScreen';
+  static String homePage = 'homePage';
 }
 
 class StaticPageMainMenu {

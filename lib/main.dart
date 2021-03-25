@@ -86,13 +86,34 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+
+  AnimationController animationController;
+  Animation<double> _animation;
+
   singIn() async {
     StaticBool.bCheckLogin = await FnDefault().setCheckLogin();
+    await FnDefault().createAccount();
     if (StaticBool.bCheckLogin) {
       await Navigator.pushReplacementNamed(context, StaticPageName.indexPage);
       print(StaticBool.bCheckLogin);
     }
+  }
+
+
+
+  @override
+  void initState() {
+    animationController = AnimationController(duration: Duration(milliseconds: 800,),vsync: this,);
+    _animation  = CurvedAnimation(parent: animationController, curve: Curves.fastOutSlowIn,);
+    animationController.forward();
+    super.initState();
+  }
+  
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -110,11 +131,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Spacer(),
-                  Text(
-                    'CareYou',
-                    style: TextStyle(
-                      fontSize: 20,
-                      letterSpacing: 0.8,
+                  // Text(
+                  //   'CareYou',
+                  //   style: TextStyle(
+                  //     fontSize: 20,
+                  //     letterSpacing: 0.8,
+                  //   ),
+                  // ),
+                  ScaleTransition(
+                    scale: _animation,
+                    child: Image.asset("assets/images/logo.png",
+                      width: 250,
+                      height: 250,
+                      filterQuality: FilterQuality.high,
                     ),
                   ),
                   TextBox(
@@ -127,17 +156,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   Spacer(),
                 ],
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                StaticBool.bCheckLogin = await FnDefault().setCheckLogin();
-                if (StaticBool.bCheckLogin) {
-                  await Navigator.pushReplacementNamed(
-                      context, StaticPageName.indexPage);
-                  print(StaticBool.bCheckLogin);
-                }
-              },
-              child: Icon(Icons.add),
             ),
           ),
         ),

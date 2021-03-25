@@ -16,11 +16,24 @@ class _IndexScreenState extends State<IndexScreen> {
   Animation<double> animation;
   CurvedAnimation curve;
 
-  final iconList = <IconData>[
-    Icons.home,
-    Icons.brightness_4,
-    Icons.brightness_6,
-    Icons.brightness_7,
+  List<BottomNavigationBarItem> listIcon = [
+    BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: "Home",
+        activeIcon: Icon(Icons.home_rounded),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.supervised_user_circle),
+      label: "User",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.supervised_user_circle),
+      label: "User",
+    ),
   ];
 
   List listPage = [];
@@ -67,40 +80,20 @@ class _IndexScreenState extends State<IndexScreen> {
                 }
               },
             ),
-            floatingActionButton: FloatingActionButton(
-              elevation: 8,
-              child: Icon(
-                Icons.brightness_3,
-              ),
-              onPressed: () {
-                _animationController.reset();
-                _animationController.forward();
-              },
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-              itemCount: iconList.length,
-              tabBuilder: (int index, bool isActive) {
-                final color = isActive ? Colors.purple : Colors.black;
-                return Icon(
-                  iconList[index],
-                  size: 24,
-                  color: color,
-                );
-              },
-              activeIndex: _bottomNavIndex,
-              notchAndCornersAnimation: animation,
-              splashSpeedInMilliseconds: 500,
-              notchSmoothness: NotchSmoothness.defaultEdge,
-              gapLocation: GapLocation.center,
-              // leftCornerRadius: 32,
-              // rightCornerRadius: 32,
-              onTap: (index) => navigatorPage(index),
-            ),
+            bottomNavigationBar: tapBottomBar(),
           ),
         ),
       ),
     );
   }
+
+  Widget tapBottomBar(){
+    return BottomNavigationBar(
+        items: listIcon,
+        currentIndex: _bottomNavIndex,
+        selectedItemColor: Colors.purple,
+        onTap: (int i) => navigatorPage(i),
+    );
+  }
+
 }

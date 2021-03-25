@@ -1,4 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
@@ -78,5 +79,8 @@ class FnDefault {
     }
   }
 
+  Future<void> createAccount()async{
+    Firebase.initializeApp().then((value) => print("Firebase_initializeApp complete"));
+  }
 //
 }
